@@ -9,6 +9,7 @@
 
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/mapbox.js/mapbox.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -34,34 +35,6 @@
         <!-- Maps'll go here -->
       </section>
       <section id="data">
-        <table>
-          <thead>
-            <th></th>
-            <th>Company name</th>
-            <th>Founder</th>
-            <th>Country</th>
-            <th>City</th>
-            <th>Zip</th>
-            <th>Street Adress</th>
-            <th>Image</th>
-            <th>HomePage</th>
-          </thead>
-          <tbody>
-          {{#each company}}
-            <tr>
-              <td data-title="Select"><input type="checkbox" name="company" value="{{id}}"></td>
-              <td data-title="Commany name">{{name}}</td>
-              <td data-title="Fuonder">{{founder}}</td>
-              <td data-title="Country">{{country}}</td>
-              <td data-title="City">{{city}}</td>
-              <td data-title="Zip">{{zip}}</td>
-              <td data-title="Street Adress">{{streetAdress}</td>
-              <td data-title="Image"><img src="{{image}}" alt="{{name}}'s picture"></td>
-              <td data-title="HomePage"><a href="{{homepage}}" title="{{name}}'s Homepage">{{homepage}}</a></td>
-            </tr>
-          {{/each}}
-          </tbody>
-        </table>
       </section>
       <footer>
 
@@ -77,9 +50,10 @@
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
     </script>
-
+    <script data-main="scripts/main" src="../bower_components/requirejs/require.js">
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
+
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -87,7 +61,6 @@
         <!-- endbuild -->
 
         <!-- build:js scripts/main.js -->
-        <script src="scripts/main.js"></script>
         <!-- endbuild -->
 </body>
 </html>
