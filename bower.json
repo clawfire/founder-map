@@ -2,6 +2,9 @@
   "name": "founder-map",
   "private": true,
   "dependencies": {
-    "modernizr": "~2.8.1"
+    "modernizr": "~2.8.1",
+    "require": "*",
+    "handlebars": "~2.0.0",
+    "mapbox.js": "~2.1.5"
   }
 }
