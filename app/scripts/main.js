@@ -9,7 +9,10 @@ requirejs.config({
     //never includes a ".js" extension since
     //the paths config could be for a directory.
     paths: {
-        handlebars: '../../bower_components/handlebars/handlebars.amd'
+        handlebars: '../../bower_components/handlebars/handlebars.amd',
+        jquery : '../../bower_components/jquery/dist/jquery',
+        csv2json : '../../bower_components/csv2json/csv2json',
+        lodash : '../../bower_components/lodash/lodash'
     }
 });
 
