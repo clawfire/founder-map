@@ -20,6 +20,8 @@ require(['templates/founderTable.js'], function(template) {
     // This will render the template defined by App.header.hbs
     document.getElementById('data').innerHTML = template(data);
   });
+
+  var initData = {
     company : [
       {
         id : 1,
@@ -44,8 +46,8 @@ require(['templates/founderTable.js'], function(template) {
       }
     ]
   }
-  // This will render the template defined by App.header.hbs
-  document.getElementById('data').innerHTML = template(data);
+  $('.container').trigger('redrawTable.foundermap',initData);
+
 
 
 });
