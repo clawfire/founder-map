@@ -16,6 +16,10 @@ requirejs.config({
 require(['templates/founderTable.js'], function(template) {
   'use strict';
   var data = {
+  $('.container').on('redrawTable.foundermap',function(e,data){
+    // This will render the template defined by App.header.hbs
+    document.getElementById('data').innerHTML = template(data);
+  });
     company : [
       {
         id : 1,
