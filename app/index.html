@@ -30,6 +30,13 @@
       <header>
         <h3 class="text-muted">founder map</h3>
       </header>
+      <aside id="config">
+        <form onSubmit="javascript:return false;">
+          <label for="csv">Data</label>
+          <textarea name="csv"></textarea>
+          <button>Save</button>
+        </form>
+      </aside>
 
       <section id="map">
         <!-- Maps'll go here -->
@@ -52,9 +59,6 @@
     </script>
     <script data-main="scripts/main" src="../bower_components/requirejs/require.js">
     <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-
-    <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js scripts/plugins.js -->
