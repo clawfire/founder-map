@@ -16,9 +16,27 @@ requirejs.config({
     }
 });
 
-require(['templates/founderTable.js'], function(template) {
+require(['templates/founderTable.js','jquery'], function(template) {
   'use strict';
-  var data = {
+  $('form').on('click','button',function(e){
+    require(['csv2json','lodash'],function(){
+      var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
+      // create a new parser from any character
+      var parser = csv2json.dsv(',','text/plain',1);
+      var parsedData = parser.parse(rawData);
+      // we iterate over all the values to sanitize the name
+      var sanitizedData = _.reduce(parsedData,function(result,n,key){
+        result[key] = _.reduce(n,function(sanitizedArray, value , key){
+          sanitizedArray[key.toLowerCase().trim().replace(' ','-')] = value;
+          return sanitizedArray;
+        }, {});
+        return result
+      },{});
+      // We use an event to inform the dom that new data are ready to display
+      $('.container').trigger('redrawTable.foundermap',sanitizedData);
+    });
+  });
+
   $('.container').on('redrawTable.foundermap',function(e,data){
     // This will render the template defined by App.header.hbs
     document.getElementById('data').innerHTML = template(data);
