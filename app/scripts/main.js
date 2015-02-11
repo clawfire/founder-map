@@ -27,7 +27,7 @@ require(['templates/founderTable.js','jquery'], function(template) {
       // we iterate over all the values to sanitize the name
       var sanitizedData = _.reduce(parsedData,function(result,n,key){
         result[key] = _.reduce(n,function(sanitizedArray, value , key){
-          sanitizedArray[key.toLowerCase().trim().replace(' ','-')] = value;
+          sanitizedArray[key.toLowerCase().trim().replace(' ','_')] = value;
           return sanitizedArray;
         }, {});
         return result
@@ -39,34 +39,34 @@ require(['templates/founderTable.js','jquery'], function(template) {
 
   $('.container').on('redrawTable.foundermap',function(e,data){
     // This will render the template defined by App.header.hbs
-    document.getElementById('data').innerHTML = template(data);
+    var tableData = {company : data};
+    document.getElementById('data').innerHTML = template(tableData);
   });
 
   var initData = {
-    company : [
-      {
-        id : 1,
-        name : 'Apple',
-        founder : 'Jobs S.',
-        country : 'USA',
-        city : 'Pao Alto',
-        zip : 'L 3456',
-        streetAdress : '1 infinite loop',
-        image : 'http://lorempixel.com/400/200/business',
-        homepage : 'http://apple.com'
-      },{
-        id : 2,
-        name : 'Microsoft',
-        founder : 'Gates B.',
-        country : 'USA',
-        city : 'Somewhere',
-        zip : 'L 3456',
-        streetAdress : '1 infinite loop',
-        image : 'http://lorempixel.com/400/200/business',
-        homepage : 'http://microsoft.com'
-      }
-    ]
-  }
+    0 : {
+      id : 1,
+      company_name : 'Apple',
+      founder : 'Jobs S.',
+      country : 'USA',
+      city : 'Pao Alto',
+      zip : 'L 3456',
+      street : '1 infinite loop',
+      photo : 'http://lorempixel.com/400/200/business',
+      home_page : 'http://apple.com'
+    },
+    1: {
+      id : 2,
+      company_name : 'Microsoft',
+      founder : 'Gates B.',
+      country : 'USA',
+      city : 'Somewhere',
+      zip : 'L 3456',
+      street : '1 infinite loop',
+      photo : 'http://lorempixel.com/400/200/business',
+      home_page : 'http://microsoft.com'
+    }
+  };
   $('.container').trigger('redrawTable.foundermap',initData);
 
 
