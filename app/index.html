@@ -33,7 +33,12 @@
       <aside id="config">
         <form onSubmit="javascript:return false;">
           <label for="csv">Data</label>
-          <textarea name="csv"></textarea>
+          <textarea name="csv" required></textarea>
+          <select name="delimiter">
+            <option value=",">,</option>
+            <option value=";">;</option>
+            <option value="&#9;">⇥</option>
+          </select>
           <button>Save</button>
         </form>
       </aside>

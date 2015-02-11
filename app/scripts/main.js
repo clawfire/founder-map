@@ -22,8 +22,9 @@ require(['templates/founderTable.js','jquery'], function(template) {
     require(['csv2json','lodash'],function(){
       var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
       // create a new parser from any character
-      var parser = csv2json.dsv(',','text/plain',1);
-      var parsedData = parser.parse(rawData);
+      var delimiter = $('form select').val(),
+          parser = csv2json.dsv(delimiter,'text/plain',1),
+          parsedData = parser.parse(rawData);
       // we iterate over all the values to sanitize the name
       var sanitizedData = _.reduce(parsedData,function(result,n,key){
         result[key] = _.reduce(n,function(sanitizedArray, value , key){
