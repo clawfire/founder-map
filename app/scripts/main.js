@@ -18,7 +18,7 @@ requirejs.config({
 
 require(['templates/founderTable.js','jquery'], function(template) {
   'use strict';
-  $('form').on('click','button',function(e){
+  $('form').on('submit',function(e){
     require(['csv2json','lodash'],function(){
       var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
       // create a new parser from any character
