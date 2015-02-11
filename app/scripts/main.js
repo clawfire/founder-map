@@ -17,6 +17,10 @@ requirejs.config({
     }
 });
 
+var _jsonData,
+    _map,
+    _featureLayer;
+
 require(['jquery'], function() {
   'use strict';
 
@@ -28,7 +32,7 @@ require(['jquery'], function() {
           parser = csv2json.dsv(delimiter,'text/plain',1),
           parsedData = parser.parse(rawData);
       // we iterate over all the values to sanitize the name
-      var sanitizedData = _.reduce(parsedData,function(result,n,key){
+      _jsonData = _.reduce(parsedData,function(result,n,key){
         result[key] = _.reduce(n,function(sanitizedArray, value , key){
           sanitizedArray[key.toLowerCase().trim().replace(' ','_')] = value;
           return sanitizedArray;
@@ -36,7 +40,8 @@ require(['jquery'], function() {
         return result
       },{});
       // We use an event to inform the dom that new data are ready to display
-      $('.container').trigger('redrawTable.foundermap',sanitizedData);
+      $('.container').trigger('redrawTable.foundermap')
+                     .trigger('redrawMap.foundermap');
     });
   });
 
@@ -44,10 +49,10 @@ require(['jquery'], function() {
   /**
    * Handlebars template handling
    */
-  $('.container').on('redrawTable.foundermap',function(e,data){
+  $('.container').on('redrawTable.foundermap',function(){
     require(['templates/founderTable.js'],function(template){
       // This will render the template defined by App.header.hbs
-      var tableData = {company : data};
+      var tableData = {company : _jsonData};
       document.getElementById('data').innerHTML = template(tableData);
     })
   });
@@ -97,7 +102,7 @@ require(['jquery'], function() {
 
 
 
-  var initData = {
+  _jsonData = {
     0 : {
       id : 1,
       company_name : 'Apple',
@@ -121,7 +126,7 @@ require(['jquery'], function() {
       home_page : 'http://microsoft.com'
     }
   };
-  $('.container').trigger('redrawTable.foundermap',initData)
+  $('.container').trigger('redrawTable.foundermap')
                  .trigger('redrawMap.foundermap');
 
 
