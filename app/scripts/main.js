@@ -12,12 +12,14 @@ requirejs.config({
         handlebars: '../../bower_components/handlebars/handlebars.amd',
         jquery : '../../bower_components/jquery/dist/jquery',
         csv2json : '../../bower_components/csv2json/csv2json',
-        lodash : '../../bower_components/lodash/lodash'
+        lodash : '../../bower_components/lodash/lodash',
+        mapbox : '../../bower_components/mapbox.js/mapbox'
     }
 });
 
-require(['templates/founderTable.js','jquery'], function(template) {
+require(['jquery'], function() {
   'use strict';
+
   $('form').on('submit',function(e){
     require(['csv2json','lodash'],function(){
       var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
@@ -38,11 +40,62 @@ require(['templates/founderTable.js','jquery'], function(template) {
     });
   });
 
+
+  /**
+   * Handlebars template handling
+   */
   $('.container').on('redrawTable.foundermap',function(e,data){
-    // This will render the template defined by App.header.hbs
-    var tableData = {company : data};
-    document.getElementById('data').innerHTML = template(tableData);
+    require(['templates/founderTable.js'],function(template){
+      // This will render the template defined by App.header.hbs
+      var tableData = {company : data};
+      document.getElementById('data').innerHTML = template(tableData);
+    })
   });
+
+  /**
+   * MapBox instaciation
+   */
+  $('.container').on('redrawMap.foundermap',function(e,data){
+    require(['mapbox'],function(){
+      L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
+      var geojson = [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-77.03238901390978,38.913188059745586]
+          },
+          "properties": {
+            "title": "Mapbox DC",
+            "description": "1714 14th St NW, Washington DC",
+            "marker-color": "#fc4353",
+            "marker-size": "large",
+            "marker-symbol": "monument"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [-122.414, 37.776]
+          },
+          "properties": {
+            "title": "Mapbox SF",
+            "description": "155 9th St, San Francisco",
+            "marker-color": "#fc4353",
+            "marker-size": "large",
+            "marker-symbol": "harbor"
+          }
+        }
+      ];
+
+      L.mapbox.map('map', 'examples.map-i86nkdio')
+        .setView([37.8, -96], 4)
+        .featureLayer.setGeoJSON(geojson);
+    })
+  });
+
+
 
   var initData = {
     0 : {
@@ -68,8 +121,8 @@ require(['templates/founderTable.js','jquery'], function(template) {
       home_page : 'http://microsoft.com'
     }
   };
-  $('.container').trigger('redrawTable.foundermap',initData);
-
+  $('.container').trigger('redrawTable.foundermap',initData)
+                 .trigger('redrawMap.foundermap');
 
 
 });
