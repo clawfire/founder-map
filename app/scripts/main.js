@@ -61,42 +61,35 @@ require(['jquery'], function() {
    * MapBox instaciation
    */
   $('.container').on('redrawMap.foundermap',function(e,data){
-    require(['mapbox'],function(){
+    require(['mapbox','lodash'],function(){
       L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
-      var geojson = [
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [-77.03238901390978,38.913188059745586]
-          },
-          "properties": {
-            "title": "Mapbox DC",
-            "description": "1714 14th St NW, Washington DC",
-            "marker-color": "#fc4353",
-            "marker-size": "large",
-            "marker-symbol": "monument"
-          }
-        },
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [-122.414, 37.776]
-          },
-          "properties": {
-            "title": "Mapbox SF",
-            "description": "155 9th St, San Francisco",
-            "marker-color": "#fc4353",
-            "marker-size": "large",
-            "marker-symbol": "harbor"
-          }
-        }
-      ];
-
-      L.mapbox.map('map', 'examples.map-i86nkdio')
-        .setView([37.8, -96], 4)
-        .featureLayer.setGeoJSON(geojson);
+      var geojson = [];
+      _.each(_jsonData,function(n,key){
+        console.log(n);
+        if (n.garage_latitude && n.garage_longitude) {
+          geojson.push({
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [+n.garage_longitude,+n.garage_latitude]
+            },
+            "properties": {
+              "title": n.company_name,
+              "description": n.street + ', ' + n.city,
+              "marker-color": "#fc4353",
+              "marker-size": "medium",
+              "marker-symbol": "warehouse"
+            }
+          });
+        };
+      });
+      console.log(geojson);
+      if (document.getElementById('map').children.length < 1) {
+        _map = L.mapbox.map('map', 'examples.map-i86nkdio');
+      };
+      _featureLayer = _map.featureLayer;
+      _featureLayer.setGeoJSON(geojson);
+      _map.fitBounds(_featureLayer.getBounds());
     })
   });
 
@@ -112,8 +105,11 @@ require(['jquery'], function() {
       zip : 'L 3456',
       street : '1 infinite loop',
       photo : 'http://lorempixel.com/400/200/business',
-      home_page : 'http://apple.com'
+      home_page : 'http://apple.com',
+      garage_latitude : 37.3403188,
+      garage_longitude : -122.0581469
     },
+
     1: {
       id : 2,
       company_name : 'Microsoft',
@@ -123,7 +119,9 @@ require(['jquery'], function() {
       zip : 'L 3456',
       street : '1 infinite loop',
       photo : 'http://lorempixel.com/400/200/business',
-      home_page : 'http://microsoft.com'
+      home_page : 'http://microsoft.com',
+      garage_latitude : 37.472189,
+      garage_longitude : -122.190191
     }
   };
   $('.container').trigger('redrawTable.foundermap')
