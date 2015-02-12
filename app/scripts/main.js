@@ -42,6 +42,8 @@ require(['jquery'], function() {
       // We use an event to inform the dom that new data are ready to display
       $('.container').trigger('redrawTable.foundermap')
                      .trigger('redrawMap.foundermap');
+      // Hide the config panel
+      $('#config').toggle();
     });
   });
 
@@ -90,8 +92,12 @@ require(['jquery'], function() {
       _map.fitBounds(_featureLayer.getBounds());
     })
   });
-
-
+  /**
+   * Display / Hide Config on desktop
+   */
+   $('#toggle-config').on('click',function(){
+    $('#config').toggle();
+   });
 
   _jsonData = {
     0 : {
