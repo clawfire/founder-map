@@ -1,4 +1,5 @@
 /* jshint devel:true */
+/*global require, requirejs */
 
 requirejs.config({
     //By default load any module IDs from js/lib
@@ -21,11 +22,12 @@ var _jsonData,
     _map,
     _featureLayer;
 
-require(['jquery'], function() {
+require(['jquery'], function($) {
   'use strict';
 
   $('form').on('submit',function(e){
-    require(['csv2json','lodash'],function(){
+    e.stopPropagation();
+    require(['csv2json','lodash'],function(csv2json, _){
       var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
       // create a new parser from any character
       var delimiter = $('form select').val(),
@@ -37,7 +39,7 @@ require(['jquery'], function() {
           sanitizedArray[key.toLowerCase().trim().replace(' ','_')] = value;
           return sanitizedArray;
         }, {});
-        return result
+        return result;
       },{});
       // We use an event to inform the dom that new data are ready to display
       $('.container').trigger('redrawTable.foundermap')
@@ -56,41 +58,42 @@ require(['jquery'], function() {
       // This will render the template defined by App.header.hbs
       var tableData = {company : _jsonData};
       document.getElementById('data').innerHTML = template(tableData);
-    })
+    });
   });
 
   /**
    * MapBox instaciation
    */
-  $('.container').on('redrawMap.foundermap',function(e,data){
-    require(['mapbox','lodash'],function(){
+  $('.container').on('redrawMap.foundermap',function(){
+    require(['mapbox','lodash'],function(L, _){
       L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
       var geojson = [];
-      _.each(_jsonData,function(n,key){
+      _.each(_jsonData,function(n){
+        /*jshint camelcase: false */
         if (n.garage_latitude && n.garage_longitude) {
           geojson.push({
-            "type": "Feature",
-            "geometry": {
-              "type": "Point",
-              "coordinates": [+n.garage_longitude,+n.garage_latitude]
+            'type': 'Feature',
+            'geometry': {
+              'type': 'Point',
+              'coordinates': [+n.garage_longitude,+n.garage_latitude]
             },
-            "properties": {
-              "title": n.company_name,
-              "description": n.street + ', ' + n.city,
-              "marker-color": "#fc4353",
-              "marker-size": "medium",
-              "marker-symbol": "warehouse"
+            'properties': {
+              'title': n.company_name,
+              'description': n.street + ', ' + n.city,
+              'marker-color': '#fc4353',
+              'marker-size': 'medium',
+              'marker-symbol': 'warehouse'
             }
           });
-        };
+        }
       });
       if (document.getElementById('map').children.length < 1) {
         _map = L.mapbox.map('map', 'examples.map-i86nkdio');
-      };
+      }
       _featureLayer = _map.featureLayer;
       _featureLayer.setGeoJSON(geojson);
       _map.fitBounds(_featureLayer.getBounds());
-    })
+    });
   });
   /**
    * Display / Hide Config on desktop
@@ -98,7 +101,7 @@ require(['jquery'], function() {
    $('#toggle-config').on('click',function(){
     $('#config').toggle();
    });
-
+   /*jshint camelcase: false */
   _jsonData = {
     0 : {
       id : 1,
