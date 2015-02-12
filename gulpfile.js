@@ -92,6 +92,11 @@ gulp.task('templates', function () {
     .pipe($.defineModule('amd'))
     .pipe(gulp.dest('.tmp/templates'));
 });
+// http://charliegleason.com/articles/deploying-to-github-pages-with-gulp
+gulp.task('deploy', function () {
+  return gulp.src("./dist/**/*")
+    .pipe($.deploy())
+});
 
 gulp.task('serve', ['connect', 'watch'], function () {
   require('opn')('http://localhost:9000');
