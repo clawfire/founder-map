@@ -16,6 +16,9 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 $link : #5694f1;
 $base : #777;
 
+$mobile-bp : 480px; // mobile on portrait AND landscape
+$tablet-bp : 768px; // table on portrait
+
 /**
  * GENERALS
  */
@@ -26,7 +29,10 @@ body{
   color: $base;
 }
 .container{
-    padding: rem(40);
+    padding: rem(10);
+    @include breakpoint($mobile-bp){
+      padding: rem(40);
+    }
     margin: 0 auto;
     position: relative;
 }
@@ -106,8 +112,7 @@ input[type="submit"]{
 /**
  * TABLE
  */
-#data{
-}
+#data{}
 table{
   width: 100%;
 }
@@ -117,10 +122,62 @@ th,td{
 }
 th{
   color: darken($base,70%);
+  &:nth-child(1){text-indent: -999px;}
+
 }
-tbody tr:nth-of-type(2n+1){
+tbody tr:nth-of-type(odd){
   background: lighten($base,50%);
 }
 tr img {
   max-width: 150px;
+}
+// Table take 890px but we had to add the 40px padding on the conainter
+// Clever idea by David Bushell (@dbushell).
+@include breakpoint(max-width 970px){
+
+  // table {
+  //   width: 100%;
+  //   border-collapse: collapse;
+  //   border-spacing: 0;
+  // }
+  // th,td{
+  //   margin: 0;
+  //   vertical-align: top;
+  // }
+  // th{
+  //   text-align: left;
+  // }
+  table{
+    display: block;
+    position: relative;
+    width: 100%;
+  }
+  thead{
+    display: block;
+    float: left;
+    tr{
+      display: block;
+    }
+  }
+  tbody{
+    display: block;
+    width: auto;
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+    tr{
+      display: inline-block;
+      vertical-align: top;
+    }
+  }
+  th{
+    display: block;
+    text-align: right;
+    &:nth-child(1){text-indent: 0}
+  }
+  td{
+    display: block;
+    min-height: 1.25em;
+    text-align: left;
+  }
 }
