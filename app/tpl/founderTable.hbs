@@ -1,14 +1,14 @@
 <table>
   <thead>
-    <th></th>
+    <th>Select</th>
     <th>Company name</th>
     <th>Founder</th>
     <th>Country</th>
     <th>City</th>
     <th>Zip</th>
     <th>Street Adress</th>
-    <th>Image</th>
     <th>HomePage</th>
+    <th>Image</th>
   </thead>
   <tbody>
   {{#each company}}
@@ -20,8 +20,8 @@
       <td data-title="City">{{city}}</td>
       <td data-title="Zip">{{postal_code}}</td>
       <td data-title="Street Adress">{{street}}</td>
-      <td data-title="Image"><img src="{{photo}}" alt="{{company_name}}'s picture"></td>
       <td data-title="HomePage"><a href="{{home_page}}" title="{{company_name}}'s Homepage">{{home_page}}</a></td>
+      <td data-title="Image"><a href="{{photo}}" title="click to enlarge the picture"><img src="{{photo}}" alt="{{company_name}}'s picture"></a></td>
     </tr>
   {{/each}}
   </tbody>
