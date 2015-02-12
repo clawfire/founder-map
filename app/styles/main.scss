@@ -113,10 +113,14 @@ table{
 }
 th,td{
   padding : 5px 10px;
+  vertical-align: middle;
 }
 th{
   color: darken($base,70%);
 }
 tbody tr:nth-of-type(2n+1){
   background: lighten($base,50%);
+}
+tr img {
+  max-width: 150px;
 }
