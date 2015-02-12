@@ -4,7 +4,6 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "amd-optimize": "^0.4.3",
     "apache-server-configs": "^2.7.1",
     "connect": "^3.0.1",
     "connect-livereload": "^0.5.0",

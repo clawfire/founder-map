@@ -27,7 +27,7 @@ require(['jquery'], function($) {
 
   $('form').on('submit',function(e){
     e.stopPropagation();
-    require(['csv2json','lodash'],function(csv2json, _){
+    require(['csv2json','lodash'],function(){
       var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
       // create a new parser from any character
       var delimiter = $('form select').val(),
@@ -65,7 +65,7 @@ require(['jquery'], function($) {
    * MapBox instaciation
    */
   $('.container').on('redrawMap.foundermap',function(){
-    require(['mapbox','lodash'],function(L, _){
+    require(['mapbox','lodash'],function(){
       L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
       var geojson = [];
       _.each(_jsonData,function(n){
