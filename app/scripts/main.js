@@ -65,7 +65,6 @@ require(['jquery'], function() {
       L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
       var geojson = [];
       _.each(_jsonData,function(n,key){
-        console.log(n);
         if (n.garage_latitude && n.garage_longitude) {
           geojson.push({
             "type": "Feature",
@@ -83,7 +82,6 @@ require(['jquery'], function() {
           });
         };
       });
-      console.log(geojson);
       if (document.getElementById('map').children.length < 1) {
         _map = L.mapbox.map('map', 'examples.map-i86nkdio');
       };
@@ -102,7 +100,7 @@ require(['jquery'], function() {
       founder : 'Jobs S.',
       country : 'USA',
       city : 'Pao Alto',
-      zip : 'L 3456',
+      postal_code : 'L 3456',
       street : '1 infinite loop',
       photo : 'http://lorempixel.com/400/200/business',
       home_page : 'http://apple.com',
@@ -116,7 +114,7 @@ require(['jquery'], function() {
       founder : 'Gates B.',
       country : 'USA',
       city : 'Somewhere',
-      zip : 'L 3456',
+      postal_code : 'L 3456',
       street : '1 infinite loop',
       photo : 'http://lorempixel.com/400/200/business',
       home_page : 'http://microsoft.com',
