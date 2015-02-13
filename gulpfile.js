@@ -89,16 +89,22 @@ gulp.task('connect', ['styles'], function () {
 gulp.task('templates', function () {
   return gulp.src('app/tpl/**/*.hbs')
     .pipe($.handlebars())
-    .pipe($.defineModule('amd'))
-    .pipe(gulp.dest('.tmp/templates'));
+    .pipe($.wrap('Handlebars.template(<%= contents %>)'))
+    .pipe($.declare({
+      namespace : 'foundermap.templates',
+      noRedeclare: true,
+    }))
+    .pipe($.concat('template.js'))
+    .pipe(gulp.dest('app/scripts'));
 });
+
 // http://charliegleason.com/articles/deploying-to-github-pages-with-gulp
 gulp.task('deploy', function () {
   return gulp.src("./dist/**/*")
     .pipe($.deploy())
 });
 
-gulp.task('serve', ['connect', 'watch'], function () {
+gulp.task('serve', ['templates','wiredep','connect', 'watch'], function () {
   require('opn')('http://localhost:9000');
 });
 
@@ -132,7 +138,7 @@ gulp.task('watch', ['connect'], function () {
   gulp.watch('bower.json', ['wiredep']);
 });
 
-gulp.task('build', ['jshint', 'html', 'images', 'fonts', 'extras'], function () {
+gulp.task('build', ['jshint', 'jsbuild', 'html', 'images', 'fonts', 'extras'], function () {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

@@ -1,52 +1,30 @@
 /* jshint devel:true */
-/*global require, requirejs */
-
-requirejs.config({
-    //By default load any module IDs from js/lib
-    baseUrl: 'scripts/lib',
-    //except, if the module ID starts with "app",
-    //load it from the js/app directory. paths
-    //config is relative to the baseUrl, and
-    //never includes a ".js" extension since
-    //the paths config could be for a directory.
-    paths: {
-        handlebars: '../../bower_components/handlebars/handlebars.amd',
-        jquery : '../../bower_components/jquery/dist/jquery',
-        csv2json : '../../bower_components/csv2json/csv2json',
-        lodash : '../../bower_components/lodash/lodash',
-        mapbox : '../../bower_components/mapbox.js/mapbox'
-    }
-});
+/*global require, requirejs, L, _, csv2json */
 
 var _jsonData,
     _map,
     _featureLayer;
-
-require(['jquery'], function($) {
   'use strict';
 
-  $('form').on('submit',function(e){
-    e.stopPropagation();
-    require(['csv2json','lodash'],function(){
-      var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
-      // create a new parser from any character
-      var delimiter = $('form select').val(),
-          parser = csv2json.dsv(delimiter,'text/plain',1),
-          parsedData = parser.parse(rawData);
-      // we iterate over all the values to sanitize the name
-      _jsonData = _.reduce(parsedData,function(result,n,key){
-        result[key] = _.reduce(n,function(sanitizedArray, value , key){
-          sanitizedArray[key.toLowerCase().trim().replace(' ','_')] = value;
-          return sanitizedArray;
-        }, {});
-        return result;
-      },{});
-      // We use an event to inform the dom that new data are ready to display
-      $('.container').trigger('redrawTable.foundermap')
-                     .trigger('redrawMap.foundermap');
-      // Hide the config panel
-      $('#config').toggle();
-    });
+  $('form').on('submit',function(){
+    var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
+    // create a new parser from any character
+    var delimiter = $('form select').val(),
+        parser = csv2json.dsv(delimiter,'text/plain',1),
+        parsedData = parser.parse(rawData);
+    // we iterate over all the values to sanitize the name
+    _jsonData = _.reduce(parsedData,function(result,n,key){
+      result[key] = _.reduce(n,function(sanitizedArray, value , key){
+        sanitizedArray[key.toLowerCase().trim().replace(' ','_')] = value;
+        return sanitizedArray;
+      }, {});
+      return result;
+    },{});
+    // We use an event to inform the dom that new data are ready to display
+    $('.container').trigger('redrawTable.foundermap')
+                   .trigger('redrawMap.foundermap');
+    // Hide the config panel
+    $('#config').toggle();
   });
 
 
@@ -54,46 +32,42 @@ require(['jquery'], function($) {
    * Handlebars template handling
    */
   $('.container').on('redrawTable.foundermap',function(){
-    require(['templates/founderTable.js'],function(template){
-      // This will render the template defined by App.header.hbs
-      var tableData = {company : _jsonData};
-      document.getElementById('data').innerHTML = template(tableData);
-    });
+    // This will render the template defined by App.header.hbs
+    var tableData = {company : _jsonData};
+    document.getElementById('data').innerHTML = foundermap.templates.founderTable(tableData);
   });
 
   /**
    * MapBox instaciation
    */
   $('.container').on('redrawMap.foundermap',function(){
-    require(['mapbox','lodash'],function(){
-      L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
-      var geojson = [];
-      _.each(_jsonData,function(n){
-        /*jshint camelcase: false */
-        if (n.garage_latitude && n.garage_longitude) {
-          geojson.push({
-            'type': 'Feature',
-            'geometry': {
-              'type': 'Point',
-              'coordinates': [+n.garage_longitude,+n.garage_latitude]
-            },
-            'properties': {
-              'title': n.company_name,
-              'description': n.street + ', ' + n.city,
-              'marker-color': '#fc4353',
-              'marker-size': 'medium',
-              'marker-symbol': 'warehouse'
-            }
-          });
-        }
-      });
-      if (document.getElementById('map').children.length < 1) {
-        _map = L.mapbox.map('map', 'examples.map-i86nkdio');
+    L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
+    var geojson = [];
+    _.each(_jsonData,function(n){
+      /*jshint camelcase: false */
+      if (n.garage_latitude && n.garage_longitude) {
+        geojson.push({
+          'type': 'Feature',
+          'geometry': {
+            'type': 'Point',
+            'coordinates': [+n.garage_longitude,+n.garage_latitude]
+          },
+          'properties': {
+            'title': n.company_name,
+            'description': n.street + ', ' + n.city,
+            'marker-color': '#fc4353',
+            'marker-size': 'medium',
+            'marker-symbol': 'warehouse'
+          }
+        });
       }
-      _featureLayer = _map.featureLayer;
-      _featureLayer.setGeoJSON(geojson);
-      _map.fitBounds(_featureLayer.getBounds());
     });
+    if (document.getElementById('map').children.length < 1) {
+      _map = L.mapbox.map('map', 'examples.map-i86nkdio');
+    }
+    _featureLayer = _map.featureLayer;
+    _featureLayer.setGeoJSON(geojson);
+    _map.fitBounds(_featureLayer.getBounds());
   });
   /**
    * Display / Hide Config on desktop
@@ -135,4 +109,3 @@ require(['jquery'], function($) {
                  .trigger('redrawMap.foundermap');
 
 
-});
