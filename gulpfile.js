@@ -3,6 +3,7 @@
 // generated on 2015-02-07 using generator-gulp-webapp 0.2.0
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')();
+var deploy = require('gulp-gh-pages');
 
 gulp.task('styles', function () {
   return gulp.src('app/styles/main.scss')
@@ -101,7 +102,7 @@ gulp.task('templates', function () {
 // http://charliegleason.com/articles/deploying-to-github-pages-with-gulp
 gulp.task('deploy', function () {
   return gulp.src("./dist/**/*")
-    .pipe($.deploy())
+    .pipe(deploy())
 });
 
 gulp.task('serve', ['templates','wiredep','connect', 'watch'], function () {
