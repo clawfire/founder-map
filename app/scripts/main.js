@@ -1,12 +1,12 @@
 /* jshint devel:true */
-/*global require, requirejs, L, _, csv2json */
+/*global foundermap, L, _, csv2json */
 
 var _jsonData,
     _map,
     _featureLayer;
-  'use strict';
 
   $('form').on('submit',function(){
+    'use strict';
     var rawData = document.getElementById('config').getElementsByTagName('textarea')[0].value;
     // create a new parser from any character
     var delimiter = $('form select').val(),
@@ -32,6 +32,7 @@ var _jsonData,
    * Handlebars template handling
    */
   $('.container').on('redrawTable.foundermap',function(){
+    'use strict';
     // This will render the template defined by App.header.hbs
     var tableData = {company : _jsonData};
     document.getElementById('data').innerHTML = foundermap.templates.founderTable(tableData);
@@ -41,6 +42,7 @@ var _jsonData,
    * MapBox instaciation
    */
   $('.container').on('redrawMap.foundermap',function(){
+    'use strict';
     L.mapbox.accessToken = 'pk.eyJ1IjoidGhpYmF1bHRtaWxhbiIsImEiOiJPTk5Sc1A0In0.cns6bkFRjcQfIfigb0uztg';
     var geojson = [];
     _.each(_jsonData,function(n){
@@ -73,6 +75,7 @@ var _jsonData,
    * Display / Hide Config on desktop
    */
    $('#toggle-config').on('click',function(){
+    'use strict';
     $('#config').toggle();
    });
    /*jshint camelcase: false */
